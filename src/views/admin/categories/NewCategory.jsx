@@ -1,23 +1,30 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Button, Card, Form } from 'react-bootstrap'
-import { NavLink } from "react-router-dom"
 import axios from "axios"
 
 function NewCategory() {
 
-    const baseUrl = 'http://localhost:3030/admin/categories/new'
+    const baseUrl = 'http://localhost:8000/admin/categories/new'
     const [ title, setTitle ] = useState('')
 
     const onClickSave = async () => {
-        await axios.post(baseUrl, {
-          "title": title.toString()
+        // const _data = {
+        //     title: title.toString()
+        // }
+
+        // await fetch(baseUrl, {
+        //     method: "POST",
+        //     body: JSON.stringify(_data),
+        //     headers: {"Content-type": "application/json; charset=UTF-8"}
+        // })
+        // .then(() => window.location.href = "http://localhost:3000/admin/categories")
+        // .catch(err => console.log(err))
+
+        await axios.post('http://localhost:8000/admin/categories/new', {
+            title: title.toString(),
         })
-        .then(() => {
-            window.location.href = "http://localhost:3000"
-        })
-        .catch(error => {
-            console.log(error)
-        })
+        .then(() => window.location.href = "http://localhost:3000/admin/categories")
+        .catch(err => console.log(err))
     }
 
     return (
@@ -29,7 +36,7 @@ function NewCategory() {
                 </Card.Header>
 
                 <Card.Body>
-                    <Form>
+                    <Form action="/admin/categories/new" method="post">
                         <Form.Group className="mb-3" controlId="formTitle">
                             <Form.Label>Título da categoria</Form.Label>
                             <Form.Control
