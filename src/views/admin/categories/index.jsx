@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Button } from 'react-bootstrap'
 import { useApi } from "../../../hooks/useApi"
 import axios from "axios"
@@ -7,6 +7,7 @@ import axios from "axios"
 export default function Category() {
     const [dataSearch, setDataSearch] = useState([])
     const [searchValue, setSearchValue] = useState('')
+    const navigate = useNavigate()
 
     const baseUrl = 'http://localhost:8000/admin/categories/delete'
 
@@ -16,19 +17,32 @@ export default function Category() {
     })
 
     useEffect(() => {
-        if(!loading){
+        if (!loading) {
             setDataSearch(categories)
         }
-    }, [categories])
+    }, [loading])
+
+    const routeRedirect = (id) => {
+        let path = `/admin/categories/edit/${id}`
+        navigate(path)
+    }
 
     const handleDelete = async (id) => {
-        if(id != undefined && id != null && !isNaN(id)){
+        if (id != undefined && id != null && !isNaN(id)) {
             console.log(id)
             await axios.delete(baseUrl + `/${id}`)
                 .then((res) => {
-                    window.location.href = "http://localhost:3000/admin/categories"
+                    setDataSearch(dataSearch.filter(cat => cat.id !== id))
                 })
                 .catch(err => console.log(err))
+        }
+    }
+
+    const popUp = (id) => {
+        const decision = window.confirm('Tem certeza que quer deletar esta categoria?')
+
+        if (decision) {
+            handleDelete(id)
         }
     }
 
@@ -42,7 +56,7 @@ export default function Category() {
     return (
         <>
             <hr />
-            <div style={{ display:'flex', justifyContent:'space-between' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <h2>Categorias</h2>
                 <div className="input-group flex-nowrap" style={{ width: 250 }}>
                     <input
@@ -75,27 +89,35 @@ export default function Category() {
                 <tbody>
                     {loading && (
                         <tr>
-                            <td>...Carregando</td>
+                            <td
+                                style={{ textAlign: 'center' }}
+                                colSpan="4"
+                            >
+                                ...Carregando
+                            </td>
                         </tr>
                     )}
-                    {!loading && dataSearch.map(category => {
-                        return(
+                    {!loading && dataSearch.length > 0 && dataSearch.map(category => {
+                        return (
                             <tr key={category.id}>
                                 <td>{category.id}</td>
                                 <td>{category.title}</td>
                                 <td>{category.slug}</td>
-                                <td>
-                                    <button
-                                        className="btn btn-warning"
+                                <td
+                                    style={{ display: 'flex', justifyContent: 'space-evenly' }}
+                                >
+                                    <Button
+                                        variant="warning"
+                                        onClick={() => routeRedirect(category.id)}
                                     >
                                         Editar
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(+category.id)}
-                                        className="btn btn-danger"
+                                    </Button>
+                                    <Button
+                                        variant="danger"
+                                        onClick={() => popUp(+category.id)}
                                     >
                                         Deletar
-                                    </button>
+                                    </Button>
                                 </td>
                             </tr>
                         )

@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import App from "./app";
 import Home from './views/Home'
 import Category from "./views/admin/categories";
-import NewCategory from "./views/admin/categories/NewCategory";
+import NewCategory from "./views/admin/categories/form";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +27,10 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/categories/new",
+        element: <NewCategory />,
+      },
+      {
+        path: "/admin/categories/edit/:id",
         element: <NewCategory />,
       },
     ],
