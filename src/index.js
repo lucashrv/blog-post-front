@@ -10,7 +10,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import App from "./app";
 import Home from './views/Home'
 import Category from "./views/admin/categories";
-import NewCategory from "./views/admin/categories/form";
+import CategoryForm from "./views/admin/categories/form";
+import Articles from "./views/admin/articles";
+import ArticlesForm from "./views/admin/articles/form";
 
 const router = createBrowserRouter([
   {
@@ -27,11 +29,23 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/categories/new",
-        element: <NewCategory />,
+        element: <CategoryForm />,
       },
       {
         path: "/admin/categories/edit/:id",
-        element: <NewCategory />,
+        element: <CategoryForm />,
+      },
+      {
+        path: "/admin/articles",
+        element: <Articles />,
+      },
+      {
+        path: "/admin/articles/new",
+        element: <ArticlesForm />,
+      },
+      {
+        path: "/admin/articles/edit/:id",
+        element: <ArticlesForm />,
       },
     ],
   },

@@ -5,7 +5,7 @@ import { useApi } from "../../../../hooks/useApi"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 
-function NewCategory() {
+function CategoryForm() {
 
     const { id } = useParams()
     const [title, setTitle] = useState('')
@@ -85,4 +85,4 @@ function NewCategory() {
     )
 }
 
-export default NewCategory;
+export default CategoryForm;

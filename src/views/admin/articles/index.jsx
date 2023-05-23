@@ -4,33 +4,33 @@ import { Button } from 'react-bootstrap'
 import { useApi } from "../../../hooks/useApi"
 import axios from "axios"
 
-export default function Category() {
+export default function Article() {
     const [dataSearch, setDataSearch] = useState([])
     const [searchValue, setSearchValue] = useState('')
     const navigate = useNavigate()
 
-    const baseUrl = 'http://localhost:8000/admin/categories/delete'
+    const baseUrl = 'http://localhost:8000/admin/articles/delete'
 
-    const { data: categories, loading, error } = useApi({
-        url: 'http://localhost:8000/admin/categories',
+    const { data: articles, loading, error } = useApi({
+        url: 'http://localhost:8000/admin/articles',
         method: 'GET'
     })
 
     useEffect(() => {
         if (!loading) {
-            setDataSearch(categories)
+            setDataSearch(articles)
         }
     }, [loading])
 
     const routeRedirect = (id) => {
-        let path = `/admin/categories/edit/${id}`
+        let path = `/admin/articles/edit/${id}`
         navigate(path)
     }
 
     const handleDelete = async (id) => {
         if (id != undefined && id != null && !isNaN(id)) {
             await axios.delete(baseUrl + `/${id}`)
-                .then((res) => {
+                .then(() => {
                     setDataSearch(dataSearch.filter(cat => cat.id !== id))
                 })
                 .catch(err => console.log(err))
@@ -38,17 +38,17 @@ export default function Category() {
     }
 
     const popUp = (id) => {
-        const decision = window.confirm('Tem certeza que quer deletar esta categoria?')
+        const decision = window.confirm('Tem certeza que quer deletar este artigo?')
 
         if (decision) {
             handleDelete(id)
         }
     }
 
-    const searchCategories = () => {
+    const searchArticles = () => {
         !loading &&
-            setDataSearch(categories.filter(category => {
-                return category.title.toLowerCase().includes(searchValue)
+            setDataSearch(articles.filter(article => {
+                return article.title.toLowerCase().includes(searchValue)
             }))
     }
 
@@ -56,24 +56,24 @@ export default function Category() {
         <>
             <hr />
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <h2>Categorias</h2>
+                <h2>Artigos</h2>
                 <div className="input-group flex-nowrap" style={{ width: 250 }}>
                     <input
                         type="text"
                         className="form-control"
                         placeholder={'Pesquise uma categoria'}
-                        onKeyUp={searchCategories}
+                        onKeyUp={searchArticles}
                         onChange={e => setSearchValue(e.target.value.toLowerCase())}
                         value={searchValue}
                     />
                 </div>
             </div>
             <hr />
-            <Link to='/admin/categories/new'>
+            <Link to='/admin/articles/new'>
                 <Button
                     variant="success"
                 >
-                    Nova categoria
+                    Novo artigo
                 </Button>
             </Link>
             <table className="table table-bordered mt-3">
@@ -96,24 +96,24 @@ export default function Category() {
                             </td>
                         </tr>
                     )}
-                    {!loading && dataSearch.length > 0 && dataSearch.map(category => {
+                    {!loading && dataSearch.length > 0 && dataSearch.map(article => {
                         return (
-                            <tr key={category.id}>
-                                <td>{category.id}</td>
-                                <td>{category.title}</td>
-                                <td>{category.slug}</td>
+                            <tr key={article.id}>
+                                <td>{article.id}</td>
+                                <td>{article.title}</td>
+                                <td>{article.slug}</td>
                                 <td
                                     style={{ display: 'flex', justifyContent: 'space-evenly' }}
                                 >
                                     <Button
                                         variant="warning"
-                                        onClick={() => routeRedirect(category.id)}
+                                        onClick={() => routeRedirect(article.id)}
                                     >
                                         Editar
                                     </Button>
                                     <Button
                                         variant="danger"
-                                        onClick={() => popUp(+category.id)}
+                                        onClick={() => popUp(+article.id)}
                                     >
                                         Deletar
                                     </Button>
