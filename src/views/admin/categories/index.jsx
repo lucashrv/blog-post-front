@@ -48,7 +48,14 @@ export default function Category() {
     const searchCategories = () => {
         !loading &&
             setDataSearch(categories.filter(category => {
-                return category.title.toLowerCase().includes(searchValue)
+                let valid = false
+                console.log(category)
+                if (category.title.toLowerCase().includes(searchValue) ||
+                    category.id.toString().includes(searchValue)
+                ) {
+                    valid = true
+                }
+                return valid
             }))
     }
 
@@ -121,7 +128,7 @@ export default function Category() {
                             </tr>
                         )
                     })}
-                    {dataSearch.length === 0 && (
+                    {!loading && dataSearch.length === 0 && (
                         <tr>
                             <td
                                 style={{ textAlign: 'center' }}

@@ -33,8 +33,9 @@ function CategoryForm() {
     }
 
     const onClickSave = async () => {
-        if (!id) {
+        if (!title) return
 
+        if (!id) {
             await axios.post(url, {
                 title: title.toString(),
             })
@@ -42,12 +43,12 @@ function CategoryForm() {
                 .catch(err => console.log(err))
 
         } else {
-            await axios.put(`${url}/update`, {
-                id,
-                title
-            })
-                .then(() => routeRedirect(`/admin/categories`))
-                .catch(err => console.log(err))
+                await axios.put(`${url}/update`, {
+                    id,
+                    title
+                })
+                    .then(() => routeRedirect(`/admin/categories`))
+                    .catch(err => console.log(err))
         }
     }
 

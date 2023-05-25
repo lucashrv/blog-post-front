@@ -48,7 +48,17 @@ export default function Article() {
     const searchArticles = () => {
         !loading &&
             setDataSearch(articles.filter(article => {
-                return article.title.toLowerCase().includes(searchValue)
+                let valid = false
+
+                if (
+                    article.title.toLowerCase().includes(searchValue.toLowerCase().trim()) ||
+                    article.id.toString().includes(searchValue.toLowerCase().trim()) ||
+                    article.category.title.toLowerCase().includes(searchValue.toLowerCase().trim())
+                ) {
+                    valid = true
+                }
+
+                return valid
             }))
     }
 
@@ -82,6 +92,7 @@ export default function Article() {
                         <th>id</th>
                         <th>Título</th>
                         <th>Slug</th>
+                        <th>Categoria</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -102,6 +113,7 @@ export default function Article() {
                                 <td>{article.id}</td>
                                 <td>{article.title}</td>
                                 <td>{article.slug}</td>
+                                <td>{article.category.title}</td>
                                 <td
                                     style={{ display: 'flex', justifyContent: 'space-evenly' }}
                                 >
@@ -121,11 +133,11 @@ export default function Article() {
                             </tr>
                         )
                     })}
-                    {dataSearch.length === 0 && (
+                    {!loading && dataSearch.length === 0 && (
                         <tr>
                             <td
                                 style={{ textAlign: 'center' }}
-                                colSpan="4">Nenhuma categoria encontrada</td>
+                                colSpan="4">Nenhum artigo encontrado</td>
                         </tr>
                     )}
                 </tbody>

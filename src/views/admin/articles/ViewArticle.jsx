@@ -1,20 +1,19 @@
 import React, { useState, useEffect, useRef } from "react"
-import { Button, Card, Form, FloatingLabel } from 'react-bootstrap'
+import { Button, Card, Form } from 'react-bootstrap'
 import { useParams } from "react-router-dom"
-import { useApi } from "../../../../hooks/useApi"
+import { useApi } from "../../../hooks/useApi"
 import { useNavigate } from "react-router-dom"
-import axios from "axios"
 import { Editor } from '@tinymce/tinymce-react';
 
-function ArticlesForm() {
+function ViewArticle() {
 
     const { id } = useParams()
     const [title, setTitle] = useState('')
     const [article, setArticle] = useState('')
     const [categoryId, setCategoryId] = useState('')
-    let url = 'http://localhost:8000/admin/articles'
     const navigate = useNavigate()
     const editorRef = useRef()
+    const url = "http://localhost:8000/admin/articles"
 
     const { data: category, loading } = useApi({
         url: `http://localhost:8000/admin/categories`,
@@ -26,12 +25,8 @@ function ArticlesForm() {
         method: 'GET'
     })
 
-    if (!id) {
-        url = `${url}/new`
-    }
-
     useEffect(() => {
-        if (data && !article && !title) {
+        if (data) {
             setArticle(data.body)
             setTitle(data.title)
             setCategoryId(data.categoryId)
@@ -39,36 +34,8 @@ function ArticlesForm() {
     }, [data])
 
 
-    const routeRedirect = (path) => {
-        navigate(path)
-    }
-
-    const onClickSave = async () => {
-        if (
-            !title &&
-            !article &&
-            !categoryId
-        ) return
-
-        if (!id) {
-            await axios.post(url, {
-                title,
-                body: article,
-                categoryId,
-            })
-                .then(res => routeRedirect(`/admin/articles/edit/${res.data.id}`))
-                .catch(err => console.log(err))
-
-        } else {
-            await axios.put(`${url}/update`, {
-                id,
-                title,
-                body: article,
-                categoryId,
-            })
-                .then((res) => routeRedirect(`/admin/articles`))
-                .catch(err => console.log(err))
-        }
+    const routeRedirect = () => {
+        navigate("/")
     }
 
     return (
@@ -76,7 +43,7 @@ function ArticlesForm() {
             <hr />
             <Card>
                 <Card.Header>
-                    <h2>{`${id ? 'Editar' : 'Cadastrar'} artigo`}</h2>
+                    <h2>{`Blog Post`}</h2>
                 </Card.Header>
 
                 <Card.Body>
@@ -84,20 +51,20 @@ function ArticlesForm() {
                         <Form.Group className="mb-3" controlId="formTitle">
                             <Form.Label>Título</Form.Label>
                             <Form.Control
+                                disabled={true}
                                 type="text"
                                 placeholder="Informe o título do artigo"
-                                onChange={(e) => setTitle(e.target.value)}
+                                onChange={() => {}}
                                 value={title}
                             />
 
                             <Form.Label className="mt-3">Categoria</Form.Label>
                             <Form.Select
-                                onChange={(e) => setCategoryId(e.target.value)}
                                 style={{ width: 400 }}
                                 value={categoryId}
+                                disabled={true}
                             >
                                 {loading && (<option>...Carregando</option>)}
-                                <option key='default' value='' selected>Escolha uma categoria</option>
                                 {!loading && category &&
 
                                     category.map(category => {
@@ -118,9 +85,9 @@ function ArticlesForm() {
                             <Editor
                                 onInit={(evt, editor) => editorRef.current = editor}
                                 value={article}
-                                onKeyUp={() => setArticle(editorRef.current.getContent())}
+                                disabled={true}
                                 init={{
-                                    height: 300,
+                                    height: 600,
                                     menubar: false,
                                     plugins: [
                                         'advlist autolink lists link image charmap print preview hr anchor save emoticons',
@@ -136,19 +103,12 @@ function ArticlesForm() {
                                 }}
                             />
                         </Form.Group>
-
-                        <Button
-                            variant="success"
-                            type="button"
-                            onClick={onClickSave}
-                        >
-                            {id ? 'Atualizar' : 'Cadastrar'}
-                        </Button>
                     </Form>
                 </Card.Body>
             </Card>
+                <Button className="mt-4 mb-4" onClick={routeRedirect}>Voltar</Button>
         </>
     )
 }
 
-export default ArticlesForm;
+export default ViewArticle;
