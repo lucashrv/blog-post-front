@@ -29,11 +29,18 @@ export default function Category() {
 
     const handleDelete = async (id) => {
         if (id != undefined && id != null && !isNaN(id)) {
-            await axios.delete(baseUrl + `/${id}`)
-                .then((res) => {
-                    setDataSearch(dataSearch.filter(cat => cat.id !== id))
-                })
-                .catch(err => console.log(err))
+            try{
+                await axios.delete(baseUrl + `/${id}`)
+                    .then(() => {
+                        setDataSearch(dataSearch.filter(cat => cat.id !== id))
+                    })
+            }catch (e) {
+                if (e.response.data.msg) {
+                    alert(e.response.data.msg)
+                } else{
+                    console.log(e)
+                }
+            }
         }
     }
 

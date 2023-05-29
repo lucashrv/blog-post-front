@@ -12,6 +12,10 @@ export default function Home() {
     const { page } = useParams()
     let currentPage = page ? +page : 1
 
+    if(isNaN(page)){
+        navigate('/1')
+    }
+
     const { data: articles, loading } = useApi({
         url: `http://localhost:8000/articles/pagination/${currentPage}`
     })
@@ -20,8 +24,6 @@ export default function Home() {
         if (!loading && articles) {
             setDataSearch(articles.data.rows)
         }
-        console.log(dataSearch);
-        console.log(articles);
     }, [loading])
 
     const searchArticles = () => {
@@ -90,7 +92,7 @@ export default function Home() {
                 <p className="lead">Aqui você pode ver artigos postados e criar novos artigos</p>
                 <hr className="my-4" />
                 <p>Crie uma conta para poder postar seus artigos</p>
-                <a className="btn btn-primary mb-3 ml-1" href="#" role="button">Criar conta</a>
+                <a className="btn btn-primary mb-3 ml-1" href="/register" role="button">Criar conta</a>
             </div>
             {loading && (
                 <div style={{ textAlign: 'center' }}>

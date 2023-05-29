@@ -18,22 +18,26 @@ import Articles from "./views/admin/articles";
 import ArticlesForm from "./views/admin/articles/form";
 import ViewArticle from "./views/admin/articles/ViewArticle"
 import SearchArticles from "./views/admin/articles/SearchArticles"
+import Users from './views/users/form'
+import Login from './views/users/Login'
 
-const token = true
+const user = localStorage.getItem('user')
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>
     <BrowserRouter>
-      <NavbarComponent token={token} />
+      <NavbarComponent token={user} />
       <Container style={{ width: '70%' }}>
         <Routes>
           <Route path="/:page?" element={<Home />} />
           <Route path="/article/:id" element={<ViewArticle />} />
           <Route path="/articles/category/:id" element={<SearchArticles />} />
+          <Route path="/register" element={<Users />} />
+          <Route path="/login" element={<Login />} />
           <Route
             path="/admin/categories"
             element={
-              <PrivateRoutes token={token}>
+              <PrivateRoutes token={user}>
                 <Category />
               </PrivateRoutes>
             }
@@ -41,7 +45,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route
             path="/admin/categories/new"
             element={
-              <PrivateRoutes token={token}>
+              <PrivateRoutes token={user}>
                 <CategoryForm />
               </PrivateRoutes>
             }
@@ -49,7 +53,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route
             path="/admin/categories/edit/:id"
             element={
-              <PrivateRoutes token={token}>
+              <PrivateRoutes token={user}>
                 <CategoryForm />
               </PrivateRoutes>
             }
@@ -57,7 +61,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route
             path="/admin/articles"
             element={
-              <PrivateRoutes token={token}>
+              <PrivateRoutes token={user}>
                 <Articles />
               </PrivateRoutes>
             }
@@ -65,7 +69,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route
             path="/admin/articles/new"
             element={
-              <PrivateRoutes token={token}>
+              <PrivateRoutes token={user}>
                 <ArticlesForm />
               </PrivateRoutes>
             }
@@ -73,7 +77,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route
             path="/admin/articles/edit/:id"
             element={
-              <PrivateRoutes token={token}>
+              <PrivateRoutes token={user}>
                 <ArticlesForm />
               </PrivateRoutes>
             }

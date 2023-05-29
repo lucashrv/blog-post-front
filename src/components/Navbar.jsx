@@ -13,13 +13,18 @@ export default function NavbarComponent({ token }) {
         method: 'GET'
     })
 
+    const logout = () => {
+        localStorage.removeItem('user')
+    }
+
     return (
         <>
-            <Navbar bg="dark" variant="dark">
+            <Navbar bg="dark" variant="dark" style={{ justifyContent: 'space-between' }}>
                 <Navbar.Brand style={{ marginLeft: 20 }} href="/">Blog Post</Navbar.Brand>
-                <Nav className="me-auto">
-                    {token && (
-                        <>
+
+                {token && (
+                    <>
+                        <Nav className="me-auto">
                             <NavDropdown title="Artigos" id="basic-nav-dropdown">
                                 <NavDropdown.Item href="/admin/articles">Artigos</NavDropdown.Item>
                                 <NavDropdown.Item href="/admin/articles/new">Cadastrar artigo</NavDropdown.Item>
@@ -28,16 +33,18 @@ export default function NavbarComponent({ token }) {
                                 <NavDropdown.Item href="/admin/categories">Categorias</NavDropdown.Item>
                                 <NavDropdown.Item href="/admin/categories/new">Cadastrar categoria</NavDropdown.Item>
                             </NavDropdown>
-                        </>
-                    )}
-                    {location.pathname === '/' && !loading && (
-                        categories.map(category => {
-                            return (
-                                <Nav.Link key={category.id} href={`http://localhost:3000/articles/category/${category.id}`}>{category.title}</Nav.Link>
-                            )
-                        })
-                    )}
-                </Nav>
+                        </Nav>
+                        <Nav className="float-right">
+                            <Nav.Link onClick={logout} href={'http://localhost:3000/login'}>Sair</Nav.Link>
+                        </Nav>
+                    </>
+                )}
+                {!token && (
+                    <Nav className="float-right">
+                        <Nav.Link href={'http://localhost:3000/login'}>Entrar</Nav.Link>
+                        <Nav.Link href={'http://localhost:3000/register'}>Cadastrar</Nav.Link>
+                    </Nav>
+                )}
             </Navbar>
         </>
     )
