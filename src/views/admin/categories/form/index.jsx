@@ -66,6 +66,8 @@ function CategoryForm() {
                             <Form.Label>Título da categoria</Form.Label>
                             <Form.Control
                                 type="text"
+                                name="title"
+                                id="title"
                                 placeholder="Informe o título da categoria"
                                 onChange={(e) => setTitle(e.target.value)}
                                 value={title}
@@ -74,7 +76,7 @@ function CategoryForm() {
 
                         <Button
                             variant="success"
-                            type="button"
+                            type="submit"
                             onClick={onClickSave}
                         >
                             {id ? 'Atualizar' : 'Cadastrar'}
